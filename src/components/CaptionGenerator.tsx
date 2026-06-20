@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, RefreshCw, MessageSquare, FileText } from "lucide-react";
+import { Sparkles, RefreshCw, MessageSquare, FileText, Download, Check } from "lucide-react";
 import { CaptionOutput } from "../data/prompts";
 import ResultCard from "./ResultCard";
 
@@ -27,6 +27,8 @@ export default function CaptionGenerator() {
   const [loading, setLoading] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [results, setResults] = useState<CaptionOutput | null>(null);
+  
+  const [exported, setExported] = useState(false);
 
   const loadPreset = () => {
     setTopic("Morning Coffee Routine");
@@ -75,6 +77,38 @@ export default function CaptionGenerator() {
     }
   };
 
+  // Export captions to file
+  const handleExportText = () => {
+    if (!results) return;
+    const fileContent = `--- CAPTION OPTIONS ---
+Topic Concept: ${topic}
+Tone Preference: ${tone}
+Platform: ${platform}
+
+[OPTION 1 — STORY STYLE]
+${results.storyStyle}
+
+[OPTION 2 — AUTHORITY STYLE]
+${results.authorityStyle}
+
+[OPTION 3 — FUNNY STYLE]
+${results.funnyStyle}
+
+---
+Generated with Creator Toolkit AI | digitalheroesco.com`;
+
+    const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `captions_${topic.toLowerCase().replace(/\s+/g, "_")}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    setExported(true);
+    setTimeout(() => setExported(false), 2000);
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* Input Form Column */}
@@ -104,7 +138,7 @@ export default function CaptionGenerator() {
               rows={3}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Describe your photo or video topic (e.g. launching our new app, healthy morning routine)..."
+              placeholder="Describe your photo or video topic (e.g. launching our new workspace template, healthy morning routine)..."
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 focus:ring-2 focus:ring-pink-500/10 transition-all font-sans resize-none"
               required
             />
@@ -195,9 +229,9 @@ export default function CaptionGenerator() {
                 <MessageSquare className="h-7 w-7 animate-pulse" />
               </div>
             </div>
-            <h4 className="text-white font-medium mb-1 animate-pulse">Polishing 3 Style Options...</h4>
+            <h4 className="text-white font-medium mb-1 animate-pulse">Running Narrative Optimizations...</h4>
             <p className="text-zinc-500 text-xs max-w-xs font-sans">
-              Formatting story structures, expert authority formats, and funny/sarcastic captions with Gemini.
+              Structuring Story, Authority, and Funny style layouts tailored for {platform}.
             </p>
           </div>
         )}
@@ -207,26 +241,41 @@ export default function CaptionGenerator() {
             <FileText className="h-10 w-10 text-zinc-600 mb-4" />
             <h4 className="text-zinc-400 font-semibold mb-1">Your 3 Captions Preview</h4>
             <p className="text-zinc-500 text-sm max-w-sm font-sans mb-4">
-              Enter your topic/concept on the left to generate Story-style, Authority-style, and Funny-style copies for {platform}.
+              Enter your topic concept on the left to instantly draft 3 custom caption angles tailored for {platform}.
             </p>
             <button
               onClick={loadPreset}
               className="text-xs font-semibold px-4 py-2 rounded-full border border-white/10 hover:border-pink-500/30 text-zinc-300 hover:text-white bg-white/5 hover:bg-pink-950/20 transition-all cursor-pointer"
             >
-              Fill out Example Preset
+              Fill out Coffee Example
             </button>
           </div>
         )}
 
         {!loading && results && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between pb-2 border-b border-white/5">
               <h4 className="font-semibold text-white flex items-center gap-2 text-sm uppercase tracking-wider text-zinc-400">
-                <FileText className="h-4 w-4 text-pink-400" /> 3 Styles Generated
+                <FileText className="h-4 w-4 text-pink-400" /> 3 Generated Captions
               </h4>
-              <span className="text-[10px] text-zinc-500 bg-white/5 px-2 py-0.5 rounded border border-white/5 font-sans">
-                Platform: {platform}
-              </span>
+              
+              {/* Batch Export Button */}
+              <button
+                onClick={handleExportText}
+                className="text-xs flex items-center gap-1.5 rounded-lg bg-pink-500/10 border border-pink-500/20 px-3 py-1.5 text-pink-300 hover:text-pink-200 transition-all cursor-pointer font-bold"
+              >
+                {exported ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Exported!</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Export all (.txt)</span>
+                  </>
+                )}
+              </button>
             </div>
 
             <div className="space-y-4">

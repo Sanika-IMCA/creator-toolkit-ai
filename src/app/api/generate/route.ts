@@ -28,18 +28,23 @@ export async function POST(req: Request) {
     let promptText = "";
 
     if (tool === "bio") {
-      const { profession, interests, personality, targetAudience } = input;
-      systemInstruction = "You are a professional social media branding specialist. Generate a JSON object containing three fields: 'instagramBio' (a punchy, multi-line bio with emojis), 'linkedInHeadline' (a professional, value-driven LinkedIn tagline), and 'collaborationLine' (a short callout text for brand inquiries/sponsors). Ensure the output is valid JSON.";
+      const { profession, interests, personality, targetAudience, style } = input;
+      systemInstruction = "You are a professional social media branding specialist. Generate a JSON object containing seven fields: 'minimal' (a minimalist-style creator bio), 'professional' (an expert, value-driven bio), 'luxury' (an elegant/luxury storytelling bio), 'clarityScore' (a number 1-100 indicating readability), 'authorityScore' (a number 1-100 indicating credibility), 'conversionScore' (a number 1-100 indicating call-to-action impact), and 'hashtags' (a line of 3-4 trending hashtags). Ensure the output is valid JSON.";
       promptText = `Create creator bios using these details:
 - Profession/Niche: ${profession}
 - Interests: ${interests}
 - Personality/Tone: ${personality}
 - Target Audience: ${targetAudience || "General social media audience"}
+- Bio Style Category: ${style}
 Format:
 {
-  "instagramBio": "...",
-  "linkedInHeadline": "...",
-  "collaborationLine": "..."
+  "minimal": "...",
+  "professional": "...",
+  "luxury": "...",
+  "clarityScore": 92,
+  "authorityScore": 88,
+  "conversionScore": 95,
+  "hashtags": "..."
 }`;
     } else if (tool === "hooks") {
       const { topic, audience, platform } = input;
@@ -94,7 +99,6 @@ Format:
   } catch (error: unknown) {
     console.error("Gemini API call failed, falling back to templates:", error);
     try {
-      // In case of parsing errors or model errors, get inputs from payload
       const body = await req.clone().json();
       return handleFallback(body.tool, body.input);
     } catch {
@@ -113,6 +117,7 @@ function handleFallback(tool: string, input: Record<string, string>) {
       interests: input.interests || "",
       personality: input.personality || "",
       targetAudience: input.targetAudience || "",
+      style: input.style || "Professional",
     });
     return NextResponse.json({ result: data });
   } else if (tool === "hooks") {

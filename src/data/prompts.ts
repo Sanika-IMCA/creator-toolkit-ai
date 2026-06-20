@@ -3,12 +3,17 @@ export interface BioInput {
   interests: string;
   personality: string;
   targetAudience: string;
+  style: string;
 }
 
 export interface BioOutput {
-  instagramBio: string;
-  linkedInHeadline: string;
-  collaborationLine: string;
+  minimal: string;
+  professional: string;
+  luxury: string;
+  clarityScore: number;
+  authorityScore: number;
+  conversionScore: number;
+  hashtags: string;
 }
 
 export interface HookInput {
@@ -51,40 +56,62 @@ export function getEmoji(text: string): string {
 }
 
 export function generateBio(input: BioInput): BioOutput {
-  const { profession, interests, personality, targetAudience } = input;
+  const { profession, interests, personality, targetAudience, style } = input;
   const profEmoji = getEmoji(profession);
   const interestList = interests.split(',').map(i => i.trim()).filter(Boolean);
   const primaryInterest = interestList[0] || "lifestyle";
   const secInterest = interestList[1] || "creating";
-  const intEmoji1 = getEmoji(primaryInterest);
 
-  const pers = personality.toLowerCase();
+  const s = style.toLowerCase();
   const aud = targetAudience || "everyone";
 
-  let instagramBio = "";
-  let linkedInHeadline = "";
-  let collaborationLine = "";
+  // Score calculations
+  const seed = (profession.length + interests.length + personality.length) % 10;
+  const clarityScore = 90 + (seed % 8);
+  const authorityScore = 85 + ((seed + 3) % 11);
+  const conversionScore = 88 + ((seed + 5) % 10);
 
-  if (pers.includes("fun") || pers.includes("wit") || pers.includes("humor") || pers.includes("silly")) {
-    instagramBio = `${profEmoji} ${profession} by day, ${intEmoji1} ${primaryInterest} lover by night!\n😜 Keeping it 100% ${personality} & relatable.\n🚀 Sharing daily tips for ${aud}!\n👇 Let's do this: linktr.ee/creator`;
-    linkedInHeadline = `${profession} & Content Creator | Fueling my passion for ${primaryInterest} & ${secInterest} | Serving up ${personality} content for ${aud}`;
-    collaborationLine = `💌 Collabs (PR/Brands): Open to fun and engaging campaigns focused on ${aud}! Let's create magic: collab@creator.ai`;
-  } else if (pers.includes("bold") || pers.includes("energetic") || pers.includes("fearless")) {
-    instagramBio = `${profEmoji} ${profession} | Breaking boundaries in ${primaryInterest}!\n⚡️ Unapologetically ${personality}.\n🔥 Empowering ${aud} to take action.\n👇 Claim your free guide here!`;
-    linkedInHeadline = `${profession} | Keynote Speaker & Creator | Empowering ${aud} through ${primaryInterest} & ${personality} strategies`;
-    collaborationLine = `⚡️ Let's build something epic! Open to high-impact sponsorships, speaking gigs, and brand partnerships targeting ${aud}. Contact: partnerships@creator.ai`;
-  } else if (pers.includes("professional") || pers.includes("corporate") || pers.includes("serio")) {
-    instagramBio = `${profEmoji} Certified ${profession}\n📈 Specializing in ${primaryInterest} & ${secInterest}.\n🎯 Driving real results for ${aud}.\n💼 Tap below to check my portfolio.`;
-    linkedInHeadline = `${profession} | Expert in ${primaryInterest} | Dedicated to delivering high-value insights for ${aud} | Speaker & Consultant`;
-    collaborationLine = `💼 Open to strategic partnerships, advisory roles, and professional collaborations that add genuine value to ${aud}. Inquiries: business@creator.ai`;
+  let minimal = "";
+  let professional = "";
+  let luxury = "";
+
+  if (s.includes("funny") || s.includes("humor")) {
+    minimal = `${profEmoji} ${profession} | ${primaryInterest}\n🤪 Powered by coffee, ${personality} thoughts & chaos.\n👇 Say hi or check out my latest vlog!`;
+    professional = `💼 The official ${profession} account.\n🤫 Pretending I have it all together while teaching ${primaryInterest} to ${aud}.\n📩 Brand collabs: hello@creator.ai`;
+    luxury = `☕️ Curating caffeine, ${primaryInterest} & daily aesthetic vlogs.\n🌸 Keeping it 100% ${personality}.\n✨ Helping you survive the weekly grind.`;
+  } else if (s.includes("authority") || s.includes("serious")) {
+    minimal = `👑 Expert ${profession} | ${primaryInterest}\n📈 Driving high-impact results with a ${personality} approach.\n👇 Tap below to learn more!`;
+    professional = `💼 Certified ${profession}\n🎓 Teaching ${aud} how to scale in ${primaryInterest} & ${secInterest}.\n⚡️ Sharing daily ${personality} insights.\n👇 Join the newsletter list here!`;
+    luxury = `✨ Master the art of ${primaryInterest}.\n👑 High-performance blueprints by a professional ${profession}.\n💫 Elevating standards for ${aud}.`;
+  } else if (s.includes("luxury")) {
+    minimal = `💎 ${profession} • ${primaryInterest}\n✨ Curating ${personality} aesthetics and elegant living.\n✉️ Collabs: collab@creator.ai`;
+    professional = `👑 Professional ${profession}\n🌸 Sharing a blend of ${primaryInterest}, ${secInterest} & mindful habits.\n💫 Helping ${aud} design a life they love.`;
+    luxury = `✨ A premium blend of ${primaryInterest}, ${secInterest} & mindful living.\n🌸 Elevated ${personality} storytelling.\n👑 Curating high-value aesthetics for ${aud}.`;
+  } else if (s.includes("minimal")) {
+    minimal = `${profEmoji} ${profession} | ${primaryInterest}\n✨ Keeping it ${personality} and simple.\n👇 Contact link below.`;
+    professional = `💼 ${profession}\n🎯 Focus: ${primaryInterest} & ${secInterest}.\n⚡️ Delivering ${personality} value daily.\n👇 Work with me.`;
+    luxury = `✨ Simply ${primaryInterest} & ${secInterest}.\n🌸 Quiet luxury & ${personality} storytelling.\n💫 Helping ${aud} find clarity.`;
   } else {
-    // Default / Creative / Aesthetic
-    instagramBio = `${profEmoji} ${profession} | Exploring the art of ${primaryInterest} ${intEmoji1}\n🌸 Curating ${personality} aesthetics & storytelling.\n💫 Helping ${aud} find their spark.\n👇 Join the community below!`;
-    linkedInHeadline = `${profession} | Creative & Strategist | Blending ${primaryInterest} with ${personality} storytelling to inspire ${aud}`;
-    collaborationLine = `✨ Let's co-create! Open to aesthetic brand collaborations, guest content, and projects targeting ${aud}. Say hello: hello@creator.ai`;
+    // Creator / Default
+    minimal = `${profEmoji} ${profession} | Creator ✨\n💄 ${interests}\n👇 Let's connect!`;
+    professional = `💼 Helping ${aud} navigate ${primaryInterest} & ${secInterest}.\n✨ Sharing ${personality} tips, guides & stories daily.\n👇 Grab my free workbook below!`;
+    luxury = `✨ A blend of ${profession}, ${primaryInterest} and mindful living.\n🌸 Elevated ${personality} content.\n👑 Curating value for ${aud}.`;
   }
 
-  return { instagramBio, linkedInHeadline, collaborationLine };
+  // Hashtags
+  const pWord = profession.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const iWord = primaryInterest.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const hashtags = `#${pWord || "creator"} #${iWord || "lifestyle"} #creatortoolkit #socialbranding`.trim();
+
+  return {
+    minimal,
+    professional,
+    luxury,
+    clarityScore,
+    authorityScore,
+    conversionScore,
+    hashtags,
+  };
 }
 
 export function generateHooks(input: HookInput): HookOutput {
@@ -115,7 +142,7 @@ export function generateHooks(input: HookInput): HookOutput {
   // Adjust hooks style to platform
   const finalHooks = hooks.map((hook) => {
     const plat = p.toLowerCase();
-    const prefix = plat.includes("tiktok") || plat.includes("reels") || plat.includes("shorts")
+    const prefix = plat.includes("tiktok") || plat.includes("reels") || plat.includes("shorts") || plat.includes("instagram")
       ? "🎥 "
       : plat.includes("twitter") || plat.includes("x")
       ? "🧵 "
