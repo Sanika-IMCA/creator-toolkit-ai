@@ -169,7 +169,7 @@ export default function Home() {
 
               <div className="flex items-center gap-3">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/Sanika-IMCA/creator-toolkit-ai"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hidden sm:flex items-center gap-2 text-[10px] font-mono font-bold px-3 py-2 rounded-lg border border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
