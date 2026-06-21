@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import dynamic from "next/dynamic";
 import Hero from "../components/Hero";
 import BioGenerator from "../components/BioGenerator";
 import HookGenerator from "../components/HookGenerator";
@@ -13,6 +14,10 @@ import CaptionGenerator from "../components/CaptionGenerator";
 import Features from "../components/Features";
 import Footer from "../components/Footer";
 import BootSequence from "../components/BootSequence";
+
+const CircuitBackground = dynamic(() => import("../components/CircuitBackground"), {
+  ssr: false,
+});
 
 type ToolType = "bio" | "hooks" | "captions";
 
@@ -112,6 +117,7 @@ export default function Home() {
         >
           {/* Animated Background Mesh & Orbs */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+            <CircuitBackground />
             <div className="absolute top-[15%] left-[5%] w-[350px] md:w-[600px] h-[350px] md:h-[600px] bg-violet-600/[0.04] rounded-full blur-[120px] animate-orb-1" />
             <div className="absolute top-[45%] right-[5%] w-[400px] md:w-[650px] h-[400px] md:h-[650px] bg-indigo-600/[0.04] rounded-full blur-[130px] animate-orb-2" />
             <div className="absolute bottom-[5%] left-[25%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-pink-600/[0.03] rounded-full blur-[110px] animate-orb-3" />
