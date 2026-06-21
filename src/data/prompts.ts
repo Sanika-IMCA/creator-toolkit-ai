@@ -65,30 +65,39 @@ export function generateBio(input: BioInput): BioOutput {
   const s = style.toLowerCase();
   const aud = targetAudience || "everyone";
 
-  // Score calculations
-  const seed = (profession.length + interests.length + personality.length) % 10;
-  const clarityScore = 90 + (seed % 8);
-  const authorityScore = 85 + ((seed + 3) % 11);
-  const conversionScore = 88 + ((seed + 5) % 10);
+  // Score calculations - randomized slightly on each compile to show live recalculation
+  const clarityScore = Math.floor(Math.random() * 12) + 85; // 85 to 97
+  const authorityScore = Math.floor(Math.random() * 12) + 85;
+  const conversionScore = Math.floor(Math.random() * 12) + 85;
 
   let minimal = "";
   let professional = "";
   let luxury = "";
 
+  const randIdx = Math.random() > 0.5;
+
   if (s.includes("funny") || s.includes("humor")) {
-    minimal = `${profEmoji} ${profession} | ${primaryInterest}\n🤪 Powered by coffee, ${personality} thoughts & chaos.\n👇 Say hi or check out my latest vlog!`;
+    minimal = randIdx
+      ? `${profEmoji} ${profession} | ${primaryInterest}\n🤪 Powered by coffee, ${personality} thoughts & chaos.\n👇 Say hi or check out my latest vlog!`
+      : `🤪 Living that ${personality} life as a ${profession}.\n🎯 Focus: ${primaryInterest}.\n👇 Tap for daily updates!`;
     professional = `💼 The official ${profession} account.\n🤫 Pretending I have it all together while teaching ${primaryInterest} to ${aud}.\n📩 Brand collabs: hello@creator.ai`;
     luxury = `☕️ Curating caffeine, ${primaryInterest} & daily aesthetic vlogs.\n🌸 Keeping it 100% ${personality}.\n✨ Helping you survive the weekly grind.`;
   } else if (s.includes("authority") || s.includes("serious")) {
     minimal = `👑 Expert ${profession} | ${primaryInterest}\n📈 Driving high-impact results with a ${personality} approach.\n👇 Tap below to learn more!`;
-    professional = `💼 Certified ${profession}\n🎓 Teaching ${aud} how to scale in ${primaryInterest} & ${secInterest}.\n⚡️ Sharing daily ${personality} insights.\n👇 Join the newsletter list here!`;
+    professional = randIdx
+      ? `💼 Certified ${profession}\n🎓 Teaching ${aud} how to scale in ${primaryInterest} & ${secInterest}.\n⚡️ Sharing daily ${personality} insights.\n👇 Join the newsletter list here!`
+      : `🎓 ${profession} & Strategist\n📈 Helping ${aud} dominate ${primaryInterest}.\n⚡️ Weekly ${personality} value drops.\n👇 System updates below!`;
     luxury = `✨ Master the art of ${primaryInterest}.\n👑 High-performance blueprints by a professional ${profession}.\n💫 Elevating standards for ${aud}.`;
   } else if (s.includes("luxury")) {
     minimal = `💎 ${profession} • ${primaryInterest}\n✨ Curating ${personality} aesthetics and elegant living.\n✉️ Collabs: collab@creator.ai`;
     professional = `👑 Professional ${profession}\n🌸 Sharing a blend of ${primaryInterest}, ${secInterest} & mindful habits.\n💫 Helping ${aud} design a life they love.`;
-    luxury = `✨ A premium blend of ${primaryInterest}, ${secInterest} & mindful living.\n🌸 Elevated ${personality} storytelling.\n👑 Curating high-value aesthetics for ${aud}.`;
+    luxury = randIdx
+      ? `✨ A premium blend of ${primaryInterest}, ${secInterest} & mindful living.\n🌸 Elevated ${personality} storytelling.\n👑 Curating high-value aesthetics for ${aud}.`
+      : `✨ Timeless aesthetics meet ${personality} design.\n👑 Professional ${profession} curation.\n🌸 Helping ${aud} find everyday luxury.`;
   } else if (s.includes("minimal")) {
-    minimal = `${profEmoji} ${profession} | ${primaryInterest}\n✨ Keeping it ${personality} and simple.\n👇 Contact link below.`;
+    minimal = randIdx
+      ? `${profEmoji} ${profession} | ${primaryInterest}\n✨ Keeping it ${personality} and simple.\n👇 Contact link below.`
+      : `🌸 ${profession} • ${primaryInterest}\n✨ Daily ${personality} minimalism.\n👇 Direct message / link.`;
     professional = `💼 ${profession}\n🎯 Focus: ${primaryInterest} & ${secInterest}.\n⚡️ Delivering ${personality} value daily.\n👇 Work with me.`;
     luxury = `✨ Simply ${primaryInterest} & ${secInterest}.\n🌸 Quiet luxury & ${personality} storytelling.\n💫 Helping ${aud} find clarity.`;
   } else {
@@ -122,7 +131,8 @@ export function generateHooks(input: HookInput): HookOutput {
 
   const isSkincare = t.toLowerCase().includes("skin");
 
-  const hooks = [
+  // Larger pool of hooks (15 options) to enable dynamic randomized slicing on REGEN
+  const hooksPool = [
     isSkincare 
       ? `I wish someone told me this before buying skincare... 🧴`
       : `I wish someone told me this before starting with ${t}...`,
@@ -136,11 +146,20 @@ export function generateHooks(input: HookInput): HookOutput {
     `⏳ This 10-second habit for ${t} will save you 100+ hours.`,
     `💡 Here is my exact 3-step blueprint to automate your ${t} starting today.`,
     `😳 Unpopular opinion: ${t} is actually the worst way to grow your brand.`,
-    `🔥 The ultimate cheat sheet for ${t} that you'll want to bookmark immediately.`
+    `🔥 The ultimate cheat sheet for ${t} that you'll want to bookmark immediately.`,
+    `📈 99% of people fail at ${t} because of this simple oversight.`,
+    `👀 If you are a creator, this single metric about ${t} will shock you.`,
+    `🚀 How to go from zero to absolute mastery in ${t} (no courses needed).`,
+    `💎 The lazy person's guide to double your results with ${t}.`,
+    `❌ Stop doing ${t} this way. Here is what to do instead.`
   ];
 
+  // Shuffle the pool and select exactly 10 items
+  const shuffled = [...hooksPool].sort(() => Math.random() - 0.5);
+  const selectedHooks = shuffled.slice(0, 10);
+
   // Adjust hooks style to platform
-  const finalHooks = hooks.map((hook) => {
+  const finalHooks = selectedHooks.map((hook) => {
     const plat = p.toLowerCase();
     const prefix = plat.includes("tiktok") || plat.includes("reels") || plat.includes("shorts") || plat.includes("instagram")
       ? "🎥 "
@@ -164,11 +183,20 @@ export function generateCaption(input: CaptionInput): CaptionOutput {
   const hashtagBase = t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).slice(0, 3).filter(Boolean).map(w => `#${w}`).join(" ");
   const generalHashtags = `#contentcreator #creators #growthmindset #creatoros`;
 
-  const storyStyle = `📖 STORY STYLE (Tailored for ${plat} in a ${tn} tone):\nI still remember when I first started working on ${t}. It was late, my hands were shaking, and I had no idea if it would work. Fast forward to today, and the results speak for themselves. The journey isn't easy, but taking that first step changes everything. ✨\n\nWhat was your starting point? Let me know below! 👇\n\n${hashtagBase} ${generalHashtags} #storytelling`;
+  // Multiple variations per style
+  const randVal = Math.random() > 0.5;
 
-  const authorityStyle = `💡 AUTHORITY STYLE (Tailored for ${plat} in a ${tn} tone):\nLet's cut through the noise about ${t}. If you want real growth, you need a system. Here is the exact blueprint I use:\n- Step 1: Define your core goals.\n- Step 2: Implement automated tracking.\n- Step 3: Iterate based on analytics.\n\nOptimizing your approach isn't optional – it's the baseline. Save this post to refer back to it! 📌\n\n${hashtagBase} ${generalHashtags} #value #learn`;
+  const storyStyle = randVal
+    ? `📖 STORY STYLE (Tailored for ${plat} in a ${tn} tone):\nI still remember when I first started working on ${t}. It was late, my hands were shaking, and I had no idea if it would work. Fast forward to today, and the results speak for themselves. The journey isn't easy, but taking that first step changes everything. ✨\n\nWhat was your starting point? Let me know below! 👇\n\n${hashtagBase} ${generalHashtags} #storytelling`
+    : `📖 STORY STYLE (Tailored for ${plat} in a ${tn} tone):\nBehind the scenes of ${t} today. Honestly, this took months of trial, error, and way too much coffee to get right. But seeing it come together makes every late night worth it. Keep pushing. 🚀\n\nWhat are you working on today? Let's chat! 👇\n\n${hashtagBase} ${generalHashtags} #behindthescenes`;
 
-  const funnyStyle = `🙃 FUNNY STYLE (Tailored for ${plat} in a ${tn} tone):\nMy last two brain cells trying to figure out ${t} at 2 AM. ☕️\nIf you're looking for a sign to stop overthinking and just publish, this is it. Or don't, and let me keep all the views. Your choice. 🍿😎\n\nShare this with a creator who's currently overthinking their posts. ✈️\n\n${hashtagBase} ${generalHashtags} #creatorproblems #lol`;
+  const authorityStyle = randVal
+    ? `💡 AUTHORITY STYLE (Tailored for ${plat} in a ${tn} tone):\nLet's cut through the noise about ${t}. If you want real growth, you need a system. Here is the exact blueprint I use:\n- Step 1: Define your core goals.\n- Step 2: Implement automated tracking.\n- Step 3: Iterate based on analytics.\n\nOptimizing your approach isn't optional – it's the baseline. Save this post to refer back to it! 📌\n\n${hashtagBase} ${generalHashtags} #value #learn`
+    : `💡 AUTHORITY STYLE (Tailored for ${plat} in a ${tn} tone):\nIf you are serious about ${t}, stop relying on luck. Focus on these three metrics instead:\n1. Hook retention rate.\n2. Average duration length.\n3. Dynamic conversion clicks.\n\nConsistency is key, but strategy is what scales. Save this guide for reference! 📌\n\n${hashtagBase} ${generalHashtags} #growth #strategy`;
+
+  const funnyStyle = randVal
+    ? `🙃 FUNNY STYLE (Tailored for ${plat} in a ${tn} tone):\nMy last two brain cells trying to figure out ${t} at 2 AM. ☕️\nIf you're looking for a sign to stop overthinking and just publish, this is it. Or don't, and let me keep all the views. Your choice. 🍿😎\n\nShare this with a creator who's currently overthinking their posts. ✈️\n\n${hashtagBase} ${generalHashtags} #creatorproblems #lol`
+    : `🙃 FUNNY STYLE (Tailored for ${plat} in a ${tn} tone):\nMe: "I will finish this ${t} project in 20 minutes."\nNarrator: "It has been three days." 🙃\nIf you are also currently avoiding your to-do list, leave a comment so we can be unproductive together. 👇🍿\n\n${hashtagBase} ${generalHashtags} #workflow #funnymemes`;
 
   return { storyStyle, authorityStyle, funnyStyle };
 }
