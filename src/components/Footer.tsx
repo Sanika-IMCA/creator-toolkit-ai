@@ -84,7 +84,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="w-full text-center sm:w-auto inline-flex items-center justify-center bg-white text-black hover:bg-zinc-200 text-xs font-bold px-5 py-3 rounded-xl transition-all cursor-pointer active:scale-95 whitespace-nowrap"
               >
-                digitalheroesco.com
+                Built for Digital Heroes
               </a>
             </div>
           </div>
