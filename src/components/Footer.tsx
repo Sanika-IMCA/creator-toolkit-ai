@@ -78,6 +78,24 @@ export default function Footer() {
 
             <div className="flex flex-col justify-start items-start space-y-4">
               <h4 className="text-xs font-bold text-white uppercase tracking-[0.15em] font-display">Production</h4>
+              
+              {/* Solo-Build Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full font-mono text-[10px] text-zinc-400">
+                <Sparkles className="h-3.5 w-3.5 text-yellow-400 animate-pulse" />
+                <span>Built solo · $0 spent · Live in 12 hours</span>
+              </div>
+              
+              {/* Soft CTA */}
+              <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+                Want a tool like this built for your brand?{" "}
+                <a 
+                  href="mailto:sanikasunilsadre@gmail.com" 
+                  className="text-violet-400 hover:text-violet-300 underline underline-offset-4 transition-colors font-semibold"
+                >
+                  Get in touch
+                </a>
+              </p>
+
               <a
                 href="https://digitalheroesco.com"
                 target="_blank"

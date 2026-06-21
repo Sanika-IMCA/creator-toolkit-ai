@@ -23,13 +23,15 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "CREATOR OS | The Operating System for Modern Creators",
-  description: "Transform your social identity. Generate premium bios, viral hooks, and high-converting captions using the next-generation AI operating system.",
+  metadataBase: new URL("https://creator-toolkit-ai.vercel.app"),
+  title: "Creator Toolkit AI | Generate Bios, Hooks & Captions",
+  description: "Generate high-converting bios, hooks, and captions in seconds using Creator OS—the ultimate social media operating system for modern creators.",
   openGraph: {
-    title: "CREATOR OS | The Operating System for Modern Creators",
-    description: "Transform your social identity. Generate premium bios, viral hooks, and high-converting captions using the next-generation AI operating system.",
+    title: "Creator Toolkit AI | Generate Bios, Hooks & Captions",
+    description: "Generate high-converting bios, hooks, and captions in seconds using Creator OS—the ultimate social media operating system for modern creators.",
     type: "website",
-    url: "https://digitalheroesco.com",
+    url: "/",
+    siteName: "Creator OS",
     images: [
       {
         url: "/og-image.png",
@@ -39,9 +41,31 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Creator Toolkit AI | Generate Bios, Hooks & Captions",
+    description: "Generate high-converting bios, hooks, and captions in seconds using Creator OS—the ultimate social media operating system for modern creators.",
+    images: ["/og-image.png"],
+  },
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/icon.png",
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Creator OS",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+  },
+  "description": "Generate high-converting bios, hooks, and captions in seconds using Creator OS—the ultimate social media operating system for modern creators.",
 };
 
 export default function RootLayout({
@@ -54,6 +78,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${plusJakarta.variable} ${spaceGrotesk.variable} scroll-smooth antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="bg-[#030303] text-zinc-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
         {children}
       </body>

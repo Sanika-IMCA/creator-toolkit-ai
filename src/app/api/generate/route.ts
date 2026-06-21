@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Redis } from "@upstash/redis";
 import { generateBio, generateHooks, generateCaption } from "../../../data/prompts";
+
+// Initialize Upstash Redis client if credentials exist
+let redis: Redis | null = null;
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
+}
 
 export async function POST(req: Request) {
   try {
@@ -94,6 +104,17 @@ Format:
     const cleanText = text.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
     const data = JSON.parse(cleanText);
 
+    // Track statistics asynchronously in Redis
+    if (redis) {
+      const keyMap: Record<string, string> = {
+        bio: "bio",
+        hooks: "hook",
+        captions: "caption"
+      };
+      const key = keyMap[tool] || tool;
+      redis.incr(`stats:${key}`).catch((err) => console.error("Redis incr error:", err));
+    }
+
     return NextResponse.json({ result: data });
 
   } catch (error: unknown) {
@@ -111,6 +132,17 @@ Format:
 }
 
 function handleFallback(tool: string, input: Record<string, string>) {
+  // Track fallback statistics in Redis
+  if (redis) {
+    const keyMap: Record<string, string> = {
+      bio: "bio",
+      hooks: "hook",
+      captions: "caption"
+    };
+    const key = keyMap[tool] || tool;
+    redis.incr(`stats:${key}`).catch((err) => console.error("Redis fallback incr error:", err));
+  }
+
   if (tool === "bio") {
     const data = generateBio({
       profession: input.profession || "",

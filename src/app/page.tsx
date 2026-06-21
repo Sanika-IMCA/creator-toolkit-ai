@@ -23,6 +23,10 @@ const CustomCursor = dynamic(() => import("../components/CustomCursor"), {
   ssr: false,
 });
 
+const StatsCounter = dynamic(() => import("../components/StatsCounter"), {
+  ssr: false,
+});
+
 type ToolType = "bio" | "hooks" | "captions";
 
 export default function Home() {
@@ -259,6 +263,9 @@ export default function Home() {
 
             {/* Features Section */}
             <Features />
+
+            {/* Live Stats Counter */}
+            <StatsCounter />
           </main>
 
           {/* Footer Section */}
