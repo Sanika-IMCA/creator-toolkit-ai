@@ -108,3 +108,9 @@ body {
   pointer-events: none;
 }
 
+/* Custom Cursor Hider */
+body.custom-cursor-active,
+body.custom-cursor-active * {
+  cursor: none !important;
+}
+
