@@ -28,7 +28,7 @@ export default function Footer() {
                 Operator: <span className="text-white">Sanika Sadre</span>
               </p>
               <p className="text-zinc-500 font-medium">
-                System: <span className="text-zinc-400">your-email@gmail.com</span>
+                System: <span className="text-zinc-400">sanikasunilsadre@gmail.com</span>
               </p>
             </div>
 
