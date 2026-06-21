@@ -122,7 +122,6 @@ export default function Home() {
           {/* Animated Background Mesh & Orbs */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
             <CircuitBackground />
-            <CustomCursor />
             <div className="absolute top-[15%] left-[5%] w-[350px] md:w-[600px] h-[350px] md:h-[600px] bg-violet-600/[0.04] rounded-full blur-[120px] animate-orb-1" />
             <div className="absolute top-[45%] right-[5%] w-[400px] md:w-[650px] h-[400px] md:h-[650px] bg-indigo-600/[0.04] rounded-full blur-[130px] animate-orb-2" />
             <div className="absolute bottom-[5%] left-[25%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-pink-600/[0.03] rounded-full blur-[110px] animate-orb-3" />
@@ -264,6 +263,7 @@ export default function Home() {
 
           {/* Footer Section */}
           <Footer />
+          <CustomCursor />
         </motion.div>
       )}
     </>
