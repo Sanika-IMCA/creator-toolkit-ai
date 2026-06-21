@@ -101,7 +101,7 @@ export function generateBio(input: BioInput): BioOutput {
   // Hashtags
   const pWord = profession.toLowerCase().replace(/[^a-z0-9]/g, "");
   const iWord = primaryInterest.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const hashtags = `#${pWord || "creator"} #${iWord || "lifestyle"} #creatortoolkit #socialbranding`.trim();
+  const hashtags = `#${pWord || "creator"} #${iWord || "lifestyle"} #creatoros #socialbranding`.trim();
 
   return {
     minimal,
@@ -162,7 +162,7 @@ export function generateCaption(input: CaptionInput): CaptionOutput {
   const plat = platform || "Instagram";
 
   const hashtagBase = t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).slice(0, 3).filter(Boolean).map(w => `#${w}`).join(" ");
-  const generalHashtags = `#contentcreator #creators #growthmindset #creatortoolkit`;
+  const generalHashtags = `#contentcreator #creators #growthmindset #creatoros`;
 
   const storyStyle = `📖 STORY STYLE (Tailored for ${plat} in a ${tn} tone):\nI still remember when I first started working on ${t}. It was late, my hands were shaking, and I had no idea if it would work. Fast forward to today, and the results speak for themselves. The journey isn't easy, but taking that first step changes everything. ✨\n\nWhat was your starting point? Let me know below! 👇\n\n${hashtagBase} ${generalHashtags} #storytelling`;
 
